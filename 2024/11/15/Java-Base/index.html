@@ -17,18 +17,18 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="山海可平，人生路难平!">
+  <meta name="description" content="Java中变量、代码块、构造器之间执行顺序是怎样的？ 先初始化静态部分，在初始化动态部分； 先初始化父类，后初始化子类 先初始化变量，在初始化代码块和构造器  所以按照这个规则可以得出总体顺序是：  父类的静态成员变量（第一次加载） 父类的静态代码块（第一次加载） 子类的静态成员变量（第一次加载） 子类的静态代码块（第一次加载） 父类的普通成员变量 父类的动态代码块 父类的构造函数 子类的普通成员">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java基础面试题">
 <meta property="og:url" content="http://example.com/2024/11/15/Java-Base/index.html">
 <meta property="og:site_name" content="难自弃">
-<meta property="og:description" content="山海可平，人生路难平!">
+<meta property="og:description" content="Java中变量、代码块、构造器之间执行顺序是怎样的？ 先初始化静态部分，在初始化动态部分； 先初始化父类，后初始化子类 先初始化变量，在初始化代码块和构造器  所以按照这个规则可以得出总体顺序是：  父类的静态成员变量（第一次加载） 父类的静态代码块（第一次加载） 子类的静态成员变量（第一次加载） 子类的静态代码块（第一次加载） 父类的普通成员变量 父类的动态代码块 父类的构造函数 子类的普通成员">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-11-15T06:13:38.000Z">
-<meta property="article:modified_time" content="2024-11-15T06:15:48.340Z">
+<meta property="article:modified_time" content="2024-11-15T10:11:17.000Z">
 <meta property="article:author" content="zhenghun">
 <meta name="twitter:card" content="summary">
 
@@ -104,6 +104,7 @@
 
   <div class="site-nav-right">
     <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
     </div>
   </div>
 </div>
@@ -128,11 +129,38 @@
     <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
 
   </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
   </ul>
 </nav>
 
 
 
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
 
 </div>
     </header>
@@ -180,7 +208,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2024-11-15 14:13:38 / 修改时间：14:15:48" itemprop="dateCreated datePublished" datetime="2024-11-15T14:13:38+08:00">2024-11-15</time>
+              <time title="创建时间：2024-11-15 14:13:38 / 修改时间：18:11:17" itemprop="dateCreated datePublished" datetime="2024-11-15T14:13:38+08:00">2024-11-15</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -193,6 +221,27 @@
             </span>
 
           
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span><br>
+            <span class="post-meta-item" title="本文字数">
+              <span class="post-meta-item-icon">
+                <i class="far fa-file-word"></i>
+              </span>
+                <span class="post-meta-item-text">本文字数：</span>
+              <span>2.7k</span>
+            </span>
+            <span class="post-meta-item" title="阅读时长">
+              <span class="post-meta-item-icon">
+                <i class="far fa-clock"></i>
+              </span>
+                <span class="post-meta-item-text">阅读时长 &asymp;</span>
+              <span>5 分钟</span>
+            </span>
 
         </div>
       </header>
@@ -203,28 +252,78 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        
+        <h1 id="Java中变量、代码块、构造器之间执行顺序是怎样的？"><a href="#Java中变量、代码块、构造器之间执行顺序是怎样的？" class="headerlink" title="Java中变量、代码块、构造器之间执行顺序是怎样的？"></a>Java中变量、代码块、构造器之间执行顺序是怎样的？</h1><ul>
+<li>先初始化静态部分，在初始化动态部分；</li>
+<li>先初始化父类，后初始化子类</li>
+<li>先初始化变量，在初始化代码块和构造器</li>
+</ul>
+<p>所以按照这个规则可以得出总体顺序是：</p>
+<ol>
+<li>父类的静态成员变量（第一次加载）</li>
+<li>父类的静态代码块（第一次加载）</li>
+<li>子类的静态成员变量（第一次加载）</li>
+<li>子类的静态代码块（第一次加载）</li>
+<li>父类的普通成员变量</li>
+<li>父类的动态代码块</li>
+<li>父类的构造函数</li>
+<li>子类的普通成员变量</li>
+<li>子类的动态代码块</li>
+<li>子类的构造函数<span id="more"></span></li>
+</ol>
+<h1 id="Integer-缓存问题"><a href="#Integer-缓存问题" class="headerlink" title="Integer 缓存问题"></a>Integer 缓存问题</h1><p>在聊缓存之前，我们先来看一个例子。如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Integer</span> <span class="variable">a</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Integer</span>(<span class="number">127</span>);</span><br><span class="line"><span class="type">Integer</span> <span class="variable">b</span> <span class="operator">=</span> <span class="number">127</span>;</span><br><span class="line">System.out.println(a == b); <span class="comment">// false</span></span><br><span class="line"></span><br><span class="line"><span class="type">Integer</span> <span class="variable">c</span> <span class="operator">=</span> Integer.valueOf(<span class="number">127</span>);</span><br><span class="line">System.out.println(b == c); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<p>从上面的代码可以看出，我们都是127整数。但是输出的结果不同。先给出结论：</p>
+<ul>
+<li>通过 new Integer()创建Integer对象，每次执行都会返回全新的Integer对象；</li>
+<li>通过Integer.valueOf()创建Integer对象，如果传入的数值在-128~127之间，那么会返回缓存的Integer对象，否则返回新的Integer对象。</li>
+<li>Integer b &#x3D; 127;实际上会调用Integer.valueOf()方法进行封装；</li>
+</ul>
+<p><strong>原因：</strong><br>Integer 内部有一个 私有静态内部类 IntegerCache。 其中有一段静态代码块，在类加载的时候被执行，会将 -128 ~ 127 的数值进行缓存，放入一个数组中。</p>
+<p>在我们调用Integer.valueOf() 方法时，会判断数值是否在-128~127范围内，如果在：就会从 IntegerCache 缓存的数组中取值，否则就返回新的 Integer 对象。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 源码</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Integer <span class="title function_">valueOf</span><span class="params">(<span class="type">int</span> i)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (i &gt;= IntegerCache.low &amp;&amp; i &lt;= IntegerCache.high)</span><br><span class="line">        <span class="keyword">return</span> IntegerCache.cache[i + (-IntegerCache.low)];</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Integer</span>(i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>实践：</strong><br>我们在开发中对比Intger值是否相等时，最好不要使用 “&#x3D;&#x3D;” 操作符，而是使用Objects.equals()方法。使用Objects.equals 可以不用关心他们哪个是null，不是null的在前面。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Integer</span> <span class="variable">a</span> <span class="operator">=</span> <span class="number">323</span>;</span><br><span class="line"><span class="type">Integer</span> <span class="variable">b</span> <span class="operator">=</span> <span class="number">323</span>;</span><br><span class="line">System.out.println(a == b); <span class="comment">// false</span></span><br><span class="line">System.out.println(Objects.equals(a, b)); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<p><strong>举一反三：</strong><br>Long 同样有 LongCache 静态内部类，缓存范围也是 [-128 ~ 127]。</p>
+<h1 id="抽象类有哪些特点？"><a href="#抽象类有哪些特点？" class="headerlink" title="抽象类有哪些特点？"></a>抽象类有哪些特点？</h1><p>抽象类就像一个模板，大家一样的行为都在模板中定义，不同的点就声明成抽象方法，交由子类去实现。因为有没有实现的部分，所以抽象类自己不能初始化。</p>
+<ol>
+<li>抽象类由abstract 声明；</li>
+<li>抽象类中需要交由子类实现的功能，由abstract声明；</li>
+<li>抽象类不能被实例化；</li>
+<li>其他都和普通的类一样（可以被继承、也可以继承别人等等）。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">AbstractAnimal</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">show</span><span class="params">()</span> &#123;</span><br><span class="line">        eat();</span><br><span class="line">        sleep();</span><br><span class="line">        run();</span><br><span class="line">        jump();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">eat</span><span class="params">()</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">sleep</span><span class="params">()</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">jump</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="String"><a href="#String" class="headerlink" title="String"></a>String</h1><p>来来来，我们来看一个经典面试题：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">a</span> <span class="operator">=</span> <span class="string">&quot;hello&quot;</span>;</span><br><span class="line"><span class="type">String</span> <span class="variable">b</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;hello&quot;</span>);</span><br><span class="line"></span><br><span class="line">System.out.println(a == b);</span><br></pre></td></tr></table></figure>
+<p>a 到底等于 b 吗？<br><strong>首先给出结论：</strong>false</p>
+<p>我们来分析一下创建过程：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 首先会在字符串常量池中找是否存在hello这个字符串。</span></span><br><span class="line"><span class="comment">// 如果不存在，在常量池中创建一个，并返回引用地址</span></span><br><span class="line"><span class="comment">// 如果存在，直接返回引用地址</span></span><br><span class="line"><span class="type">String</span> <span class="variable">a</span> <span class="operator">=</span> <span class="string">&quot;hello&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 同上，先处理字面量：会先在字符串常量池中找，没找到就在常量池创建，最终返回引用地址</span></span><br><span class="line"><span class="comment">// 上一步完成之后，会执行new动作。会在堆中创建一个hello对象（与常量池不一样），并返回引用地址</span></span><br><span class="line"><span class="type">Strin</span> <span class="variable">b</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;hello&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>常量池是运行时常量池的一部分，位于方法区中。</p>
+<h1 id="为什么JDK9开始，String-内部使用byte-存放数据？"><a href="#为什么JDK9开始，String-内部使用byte-存放数据？" class="headerlink" title="为什么JDK9开始，String 内部使用byte[]存放数据？"></a>为什么JDK9开始，String 内部使用byte[]存放数据？</h1><p>主要原因：优化内存使用和性能</p>
+<ul>
+<li>JDK9 之前：<ul>
+<li>String 使用char[]数组来存储字符数据；</li>
+<li>每个char占用2个字节，无论字符的实际编码是多少</li>
+</ul>
+</li>
+<li>JDK9及以后：<ul>
+<li>String 类使用 byte[] 数组来存储字符数据。</li>
+<li>引入了一个新的字段 coder，用于表示字符编码方式（LATIN1 或 UTF16）。</li>
+<li>LATIN1 编码方式下，每个字符占用 1 个字节（适用于ASCII字符集）。</li>
+<li>UTF16 编码方式下，每个字符占用 2 个字节（适用于Unicode字符集）。</li>
+</ul>
+</li>
+</ul>
+<h1 id="StringBuilder-和-StringBuffer-之间的区别是什么？"><a href="#StringBuilder-和-StringBuffer-之间的区别是什么？" class="headerlink" title="StringBuilder 和 StringBuffer 之间的区别是什么？"></a>StringBuilder 和 StringBuffer 之间的区别是什么？</h1><p>StringBuilder 和 StringBuffer 都继承自 AbstractStringBuilder, 所以他们的功能基本上都相似，主要就是用于构建和操作字符串。<br>区别就在于 StringBuffer 的方法加了 synchronized 而StringBuilder没有加。也就是一个是线程安全的一个是线程不安全的。</p>
+<p>所以在多线程环境下我们应该使用StringBuffer.</p>
+<p>其实还有一个点就是: String字符串的拼接底层用的还是StringBuffer:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">a</span> <span class="operator">=</span> a + <span class="string">&quot;asd&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 相当于</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">StringBuffer</span> <span class="variable">b</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuffer</span>(a);</span><br><span class="line">    b.append(<span class="string">&quot;asd&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> b.toString();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>所以要频繁拼接字符串的时候都使用StringBuffer或StringBuilder进行，提高效率，减少常量池内容。</p>
+
     </div>
 
     
     
     
-
-    <div class="reward-container">
-  <div>您的支持是对我最大的鼓励.</div>
-  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
-    打赏
-  </button>
-  <div id="qr" style="display: none;">
-      
-      <div style="display: inline-block;">
-        <img src="/images/weixin.png" alt="zhenghun 微信支付">
-        <p>微信支付</p>
-      </div>
-
-  </div>
-</div>
-
         <div class="reward-container">
   <div>您的支持是对我最大的鼓励.</div>
   <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
@@ -311,6 +410,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java%E4%B8%AD%E5%8F%98%E9%87%8F%E3%80%81%E4%BB%A3%E7%A0%81%E5%9D%97%E3%80%81%E6%9E%84%E9%80%A0%E5%99%A8%E4%B9%8B%E9%97%B4%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F%E6%98%AF%E6%80%8E%E6%A0%B7%E7%9A%84%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">Java中变量、代码块、构造器之间执行顺序是怎样的？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Integer-%E7%BC%93%E5%AD%98%E9%97%AE%E9%A2%98"><span class="nav-number">2.</span> <span class="nav-text">Integer 缓存问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8A%BD%E8%B1%A1%E7%B1%BB%E6%9C%89%E5%93%AA%E4%BA%9B%E7%89%B9%E7%82%B9%EF%BC%9F"><span class="nav-number">3.</span> <span class="nav-text">抽象类有哪些特点？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#String"><span class="nav-number">4.</span> <span class="nav-text">String</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88JDK9%E5%BC%80%E5%A7%8B%EF%BC%8CString-%E5%86%85%E9%83%A8%E4%BD%BF%E7%94%A8byte-%E5%AD%98%E6%94%BE%E6%95%B0%E6%8D%AE%EF%BC%9F"><span class="nav-number">5.</span> <span class="nav-text">为什么JDK9开始，String 内部使用byte[]存放数据？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#StringBuilder-%E5%92%8C-StringBuffer-%E4%B9%8B%E9%97%B4%E7%9A%84%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">6.</span> <span class="nav-text">StringBuilder 和 StringBuffer 之间的区别是什么？</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -361,11 +461,41 @@
     <i class="fa fa-heart"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">zhenghun</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-area"></i>
+    </span>
+    <span title="站点总字数">3k</span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">6 分钟</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
 
         
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
 
 
 
@@ -379,6 +509,7 @@
   </div>
 
   
+  <script size="300" alpha="0.6" zIndex="-1" src="/lib/canvas-ribbon/canvas-ribbon.js"></script>
   <script src="/lib/anime.min.js"></script>
   <script src="/lib/velocity/velocity.min.js"></script>
   <script src="/lib/velocity/velocity.ui.min.js"></script>
@@ -394,6 +525,8 @@
 <script src="/js/next-boot.js"></script>
 
 
+  <script defer src="/lib/three/three.min.js"></script>
+    <script defer src="/lib/three/canvas_lines.min.js"></script>
 
 
   
@@ -401,6 +534,10 @@
 
 
 
+  
+<script src="/js/local-search.js"></script>
+
+
 
 
 
@@ -416,5 +553,6 @@
 
   
 
+  
 </body>
 </html>

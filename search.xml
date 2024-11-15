@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>Java基础面试题</title>
+    <url>/2024/11/15/Java-Base/</url>
+    <content><![CDATA[<h1 id="Java中变量、代码块、构造器之间执行顺序是怎样的？"><a href="#Java中变量、代码块、构造器之间执行顺序是怎样的？" class="headerlink" title="Java中变量、代码块、构造器之间执行顺序是怎样的？"></a>Java中变量、代码块、构造器之间执行顺序是怎样的？</h1><ul>
+<li>先初始化静态部分，在初始化动态部分；</li>
+<li>先初始化父类，后初始化子类</li>
+<li>先初始化变量，在初始化代码块和构造器</li>
+</ul>
+<p>所以按照这个规则可以得出总体顺序是：</p>
+<ol>
+<li>父类的静态成员变量（第一次加载）</li>
+<li>父类的静态代码块（第一次加载）</li>
+<li>子类的静态成员变量（第一次加载）</li>
+<li>子类的静态代码块（第一次加载）</li>
+<li>父类的普通成员变量</li>
+<li>父类的动态代码块</li>
+<li>父类的构造函数</li>
+<li>子类的普通成员变量</li>
+<li>子类的动态代码块</li>
+<li>子类的构造函数<span id="more"></span></li>
+</ol>
+<h1 id="Integer-缓存问题"><a href="#Integer-缓存问题" class="headerlink" title="Integer 缓存问题"></a>Integer 缓存问题</h1><p>在聊缓存之前，我们先来看一个例子。如下：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Integer</span> <span class="variable">a</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Integer</span>(<span class="number">127</span>);</span><br><span class="line"><span class="type">Integer</span> <span class="variable">b</span> <span class="operator">=</span> <span class="number">127</span>;</span><br><span class="line">System.out.println(a == b); <span class="comment">// false</span></span><br><span class="line"></span><br><span class="line"><span class="type">Integer</span> <span class="variable">c</span> <span class="operator">=</span> Integer.valueOf(<span class="number">127</span>);</span><br><span class="line">System.out.println(b == c); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<p>从上面的代码可以看出，我们都是127整数。但是输出的结果不同。先给出结论：</p>
+<ul>
+<li>通过 new Integer()创建Integer对象，每次执行都会返回全新的Integer对象；</li>
+<li>通过Integer.valueOf()创建Integer对象，如果传入的数值在-128~127之间，那么会返回缓存的Integer对象，否则返回新的Integer对象。</li>
+<li>Integer b &#x3D; 127;实际上会调用Integer.valueOf()方法进行封装；</li>
+</ul>
+<p><strong>原因：</strong><br>Integer 内部有一个 私有静态内部类 IntegerCache。 其中有一段静态代码块，在类加载的时候被执行，会将 -128 ~ 127 的数值进行缓存，放入一个数组中。</p>
+<p>在我们调用Integer.valueOf() 方法时，会判断数值是否在-128~127范围内，如果在：就会从 IntegerCache 缓存的数组中取值，否则就返回新的 Integer 对象。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 源码</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Integer <span class="title function_">valueOf</span><span class="params">(<span class="type">int</span> i)</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (i &gt;= IntegerCache.low &amp;&amp; i &lt;= IntegerCache.high)</span><br><span class="line">        <span class="keyword">return</span> IntegerCache.cache[i + (-IntegerCache.low)];</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Integer</span>(i);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>实践：</strong><br>我们在开发中对比Intger值是否相等时，最好不要使用 “&#x3D;&#x3D;” 操作符，而是使用Objects.equals()方法。使用Objects.equals 可以不用关心他们哪个是null，不是null的在前面。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">Integer</span> <span class="variable">a</span> <span class="operator">=</span> <span class="number">323</span>;</span><br><span class="line"><span class="type">Integer</span> <span class="variable">b</span> <span class="operator">=</span> <span class="number">323</span>;</span><br><span class="line">System.out.println(a == b); <span class="comment">// false</span></span><br><span class="line">System.out.println(Objects.equals(a, b)); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
+<p><strong>举一反三：</strong><br>Long 同样有 LongCache 静态内部类，缓存范围也是 [-128 ~ 127]。</p>
+<h1 id="抽象类有哪些特点？"><a href="#抽象类有哪些特点？" class="headerlink" title="抽象类有哪些特点？"></a>抽象类有哪些特点？</h1><p>抽象类就像一个模板，大家一样的行为都在模板中定义，不同的点就声明成抽象方法，交由子类去实现。因为有没有实现的部分，所以抽象类自己不能初始化。</p>
+<ol>
+<li>抽象类由abstract 声明；</li>
+<li>抽象类中需要交由子类实现的功能，由abstract声明；</li>
+<li>抽象类不能被实例化；</li>
+<li>其他都和普通的类一样（可以被继承、也可以继承别人等等）。</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">AbstractAnimal</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">show</span><span class="params">()</span> &#123;</span><br><span class="line">        eat();</span><br><span class="line">        sleep();</span><br><span class="line">        run();</span><br><span class="line">        jump();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">eat</span><span class="params">()</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">sleep</span><span class="params">()</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">jump</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="String"><a href="#String" class="headerlink" title="String"></a>String</h1><p>来来来，我们来看一个经典面试题：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">a</span> <span class="operator">=</span> <span class="string">&quot;hello&quot;</span>;</span><br><span class="line"><span class="type">String</span> <span class="variable">b</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;hello&quot;</span>);</span><br><span class="line"></span><br><span class="line">System.out.println(a == b);</span><br></pre></td></tr></table></figure>
+<p>a 到底等于 b 吗？<br><strong>首先给出结论：</strong>false</p>
+<p>我们来分析一下创建过程：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 首先会在字符串常量池中找是否存在hello这个字符串。</span></span><br><span class="line"><span class="comment">// 如果不存在，在常量池中创建一个，并返回引用地址</span></span><br><span class="line"><span class="comment">// 如果存在，直接返回引用地址</span></span><br><span class="line"><span class="type">String</span> <span class="variable">a</span> <span class="operator">=</span> <span class="string">&quot;hello&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 同上，先处理字面量：会先在字符串常量池中找，没找到就在常量池创建，最终返回引用地址</span></span><br><span class="line"><span class="comment">// 上一步完成之后，会执行new动作。会在堆中创建一个hello对象（与常量池不一样），并返回引用地址</span></span><br><span class="line"><span class="type">Strin</span> <span class="variable">b</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;hello&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>常量池是运行时常量池的一部分，位于方法区中。</p>
+<h1 id="为什么JDK9开始，String-内部使用byte-存放数据？"><a href="#为什么JDK9开始，String-内部使用byte-存放数据？" class="headerlink" title="为什么JDK9开始，String 内部使用byte[]存放数据？"></a>为什么JDK9开始，String 内部使用byte[]存放数据？</h1><p>主要原因：优化内存使用和性能</p>
+<ul>
+<li>JDK9 之前：<ul>
+<li>String 使用char[]数组来存储字符数据；</li>
+<li>每个char占用2个字节，无论字符的实际编码是多少</li>
+</ul>
+</li>
+<li>JDK9及以后：<ul>
+<li>String 类使用 byte[] 数组来存储字符数据。</li>
+<li>引入了一个新的字段 coder，用于表示字符编码方式（LATIN1 或 UTF16）。</li>
+<li>LATIN1 编码方式下，每个字符占用 1 个字节（适用于ASCII字符集）。</li>
+<li>UTF16 编码方式下，每个字符占用 2 个字节（适用于Unicode字符集）。</li>
+</ul>
+</li>
+</ul>
+<h1 id="StringBuilder-和-StringBuffer-之间的区别是什么？"><a href="#StringBuilder-和-StringBuffer-之间的区别是什么？" class="headerlink" title="StringBuilder 和 StringBuffer 之间的区别是什么？"></a>StringBuilder 和 StringBuffer 之间的区别是什么？</h1><p>StringBuilder 和 StringBuffer 都继承自 AbstractStringBuilder, 所以他们的功能基本上都相似，主要就是用于构建和操作字符串。<br>区别就在于 StringBuffer 的方法加了 synchronized 而StringBuilder没有加。也就是一个是线程安全的一个是线程不安全的。</p>
+<p>所以在多线程环境下我们应该使用StringBuffer.</p>
+<p>其实还有一个点就是: String字符串的拼接底层用的还是StringBuffer:</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">a</span> <span class="operator">=</span> a + <span class="string">&quot;asd&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 相当于</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">StringBuffer</span> <span class="variable">b</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuffer</span>(a);</span><br><span class="line">    b.append(<span class="string">&quot;asd&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> b.toString();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>所以要频繁拼接字符串的时候都使用StringBuffer或StringBuilder进行，提高效率，减少常量池内容。</p>
+]]></content>
+      <categories>
+        <category>面试</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2024/11/15/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+  </entry>
+</search>
