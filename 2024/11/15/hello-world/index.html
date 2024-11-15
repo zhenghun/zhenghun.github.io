@@ -14,8 +14,6 @@
 
 
 <link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
-  <link rel="stylesheet" href="/lib/pace/pace-theme-loading-bar.min.css">
-  <script src="/lib/pace/pace.min.js"></script>
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
@@ -214,6 +212,22 @@
     
     
     
+
+    <div class="reward-container">
+  <div>您的支持是对我最大的鼓励.</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/weixin.png" alt="zhenghun 微信支付">
+        <p>微信支付</p>
+      </div>
+
+  </div>
+</div>
+
         <div class="reward-container">
   <div>您的支持是对我最大的鼓励.</div>
   <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
@@ -222,7 +236,7 @@
   <div id="qr" style="display: none;">
       
       <div style="display: inline-block;">
-        <img src="/images/weixin.jpg" alt="zhenghun 微信支付">
+        <img src="/images/weixin.png" alt="zhenghun 微信支付">
         <p>微信支付</p>
       </div>
 
@@ -236,6 +250,13 @@
 
 
         
+    <div class="post-nav">
+      <div class="post-nav-item"></div>
+      <div class="post-nav-item">
+    <a href="/2024/11/15/Java-Base/" rel="next" title="Java基础面试题">
+      Java基础面试题 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
       </footer>
     
   </article>
@@ -307,9 +328,13 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">1</span>
+          <span class="site-state-item-count">2</span>
           <span class="site-state-item-name">日志</span>
         </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">1</span>
+        <span class="site-state-item-name">分类</span>
       </div>
   </nav>
 </div>
@@ -373,8 +398,6 @@
 <script src="/js/next-boot.js"></script>
 
 
-  <script defer src="/lib/three/three.min.js"></script>
-    <script defer src="/lib/three/canvas_sphere.min.js"></script>
 
 
   
