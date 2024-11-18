@@ -69,7 +69,7 @@
 <p>其实还有一个点就是: String字符串的拼接底层用的还是StringBuffer:</p>
 <figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">String</span> <span class="variable">a</span> <span class="operator">=</span> a + <span class="string">&quot;asd&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 相当于</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">StringBuffer</span> <span class="variable">b</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuffer</span>(a);</span><br><span class="line">    b.append(<span class="string">&quot;asd&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> b.toString();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>所以要频繁拼接字符串的时候都使用StringBuffer或StringBuilder进行，提高效率，减少常量池内容。</p>
-]]></content>
+<h1 id="为什么hashCode和equals方法要一起重写？"><a href="#为什么hashCode和equals方法要一起重写？" class="headerlink" title="为什么hashCode和equals方法要一起重写？"></a>为什么hashCode和equals方法要一起重写？</h1>]]></content>
       <categories>
         <category>面试</category>
       </categories>
