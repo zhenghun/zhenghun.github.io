@@ -127,7 +127,147 @@
 </li>
 <li>Java提供的8大类型都实现了自己的hashCode和equals方法，所以我们自己的对象按照字段重写hashCode和equals时能够保证值一样就相等。</li>
 </ol>
-<h1 id="Object-有哪些自带方法？"><a href="#Object-有哪些自带方法？" class="headerlink" title="Object 有哪些自带方法？"></a>Object 有哪些自带方法？</h1>]]></content>
+<h1 id="Object-有哪些自带方法？"><a href="#Object-有哪些自带方法？" class="headerlink" title="Object 有哪些自带方法？"></a>Object 有哪些自带方法？</h1><ul>
+<li>registerNatives()：native方法</li>
+<li>getClass()：native方法</li>
+<li>hashCode()：native方法</li>
+<li>equals</li>
+<li>clone()：native方法</li>
+<li>toString()</li>
+<li>notify()：native方法</li>
+<li>notifyAll()：native方法</li>
+<li>wait()</li>
+<li>wait(long timeoutMillis)：native方法</li>
+<li>wait(long timeoutMillis, int nanos)</li>
+<li>finalize(): 9之后被废弃</li>
+</ul>
+<h2 id="registerNatives"><a href="#registerNatives" class="headerlink" title="registerNatives:"></a>registerNatives:</h2><p>用于注册Object中native方法用的。有些实现用Java实现比较困难或者效率没那么高的时候，就会用到C或C++等其他语言来实现，这个时候就需要注册。<br>注册实际上就是Java中的方法和本地方法之间建立一个映射关系，调用Java方法时，能够快速找到本地方法执行。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title function_">registerNatives</span><span class="params">()</span>;</span><br><span class="line"><span class="keyword">static</span> &#123;</span><br><span class="line">    registerNatives();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>所以我们自定义的类有本地实现的时候，也需要上面这段代码来完成Java方法和本地方法的注册：</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyClass</span> &#123;</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        System.loadLibrary(<span class="string">&quot;mylib&quot;</span>); <span class="comment">// 加载包含本地方法实现的库</span></span><br><span class="line">        registerNatives(); <span class="comment">// 注册本地方法</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title function_">nativeMethod</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title function_">registerNatives</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">MyClass</span> <span class="variable">myClass</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MyClass</span>();</span><br><span class="line">        myClass.nativeMethod(); <span class="comment">// 调用本地方法</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>C&#x2F;C++实现：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;jni.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;MyClass.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 实现 nativeMethod</span></span><br><span class="line">JNIEXPORT <span class="type">void</span> JNICALL <span class="title function_">Java_MyClass_nativeMethod</span><span class="params">(JNIEnv *env, jobject obj)</span> &#123;</span><br><span class="line">    <span class="comment">// 你的本地方法实现</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Native method called\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 实现 registerNatives</span></span><br><span class="line">JNIEXPORT <span class="type">void</span> JNICALL <span class="title function_">Java_MyClass_registerNatives</span><span class="params">(JNIEnv *env, jclass cls)</span> &#123;</span><br><span class="line">    JNINativeMethod methods[] = &#123;</span><br><span class="line">        &#123;<span class="string">&quot;nativeMethod&quot;</span>, <span class="string">&quot;()V&quot;</span>, (<span class="type">void</span>*)Java_MyClass_nativeMethod&#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    env-&gt;RegisterNatives(cls, methods, <span class="keyword">sizeof</span>(methods) / <span class="keyword">sizeof</span>(methods[<span class="number">0</span>]));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="getClass"><a href="#getClass" class="headerlink" title="getClass"></a>getClass</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@HotSpotIntrinsicCandidate</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">native</span> Class&lt;?&gt; getClass();</span><br></pre></td></tr></table></figure>
+<p>getClass 方法用于获取当前对象的运行时类信息。这个方法返回一个 Class 对象，该对象表示对象所属的类。</p>
+<h2 id="hashCode"><a href="#hashCode" class="headerlink" title="hashCode"></a>hashCode</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@HotSpotIntrinsicCandidate</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">native</span> <span class="type">int</span> <span class="title function_">hashCode</span><span class="params">()</span>;</span><br></pre></td></tr></table></figure>
+<p>根据对象的内存地址计算出一个整数。相同对象的hashCode一定相等。相等hashCode，对象不一定相等。<br>重写equals一定要重写hashCode。</p>
+<h2 id="equals"><a href="#equals" class="headerlink" title="equals"></a>equals</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">equals</span><span class="params">(Object obj)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> (<span class="built_in">this</span> == obj);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>引用地址相同的对象才算相等。业务上一般不会这么使用。所以都会重写equals方法。</p>
+<h2 id="clone"><a href="#clone" class="headerlink" title="clone"></a>clone</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@HotSpotIntrinsicCandidate</span></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">native</span> Object <span class="title function_">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException;</span><br></pre></td></tr></table></figure>
+<p>实现对象的浅拷贝，只有实现了Cloneable接口才可以调用该方法，否则会抛出异常。</p>
+<h2 id="toString-NaN"><a href="#toString-NaN" class="headerlink" title="toString"></a>toString</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> getClass().getName() + <span class="string">&quot;@&quot;</span> + Integer.toHexString(hashCode());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>将对象转成string内容，一般子类都会进行覆盖。</p>
+<h2 id="notify"><a href="#notify" class="headerlink" title="notify"></a>notify</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@HotSpotIntrinsicCandidate</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title function_">notify</span><span class="params">()</span>;</span><br></pre></td></tr></table></figure>
+<p>该方法唤醒在该对象上等待的某个线程。</p>
+<h2 id="notifyAll"><a href="#notifyAll" class="headerlink" title="notifyAll"></a>notifyAll</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@HotSpotIntrinsicCandidate</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title function_">notifyAll</span><span class="params">()</span>;</span><br></pre></td></tr></table></figure>
+<p>该方法唤醒在该对象上等待的所有线程。</p>
+<h2 id="wait"><a href="#wait" class="headerlink" title="wait"></a>wait</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title function_">wait</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException &#123;</span><br><span class="line">    wait(<span class="number">0L</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title function_">wait</span><span class="params">(<span class="type">long</span> timeoutMillis)</span> <span class="keyword">throws</span> InterruptedException;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title function_">wait</span><span class="params">(<span class="type">long</span> timeoutMillis, <span class="type">int</span> nanos)</span> <span class="keyword">throws</span> InterruptedException &#123;</span><br><span class="line">    <span class="keyword">if</span> (timeoutMillis &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;timeoutMillis value is negative&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (nanos &lt; <span class="number">0</span> || nanos &gt; <span class="number">999999</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;nanosecond timeout value out of range&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (nanos &gt; <span class="number">0</span>) &#123;</span><br><span class="line">        timeoutMillis++;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    wait(timeoutMillis);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>调用该方法之后，线程会进入该对象锁的等待队列（前提是该线程本身拥有该对象锁）直到获得锁或被中断。<br>其他线程可以通过notify 或 notifyAll 唤醒线程重新去获取对象锁。<br>或者其他线程调用interrupt终端该线程。<br>或则wait传入的时间到了。自动唤醒。</p>
+<h2 id="finalize"><a href="#finalize" class="headerlink" title="finalize"></a>finalize</h2><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="meta">@Deprecated(since=&quot;9&quot;)</span></span><br><span class="line"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">finalize</span><span class="params">()</span> <span class="keyword">throws</span> Throwable &#123; &#125;</span><br></pre></td></tr></table></figure>
+<p>用于在对象即将被垃圾回收器回收之前执行一些清理工作。例如关闭文件句柄、释放系统资源等。但由于其潜在的问题和限制，现代 Java 编程中很少推荐使用它。</p>
+<p>尽管 finalize 方法看起来很有用，但它有几个重要的问题和限制：</p>
+<ol>
+<li>不确定性：无法保证 finalize 方法何时会被调用，甚至可能永远不会被调用。垃圾回收器的调用时机是不确定的，依赖 finalize 方法进行资源管理是不可靠的。</li>
+<li>性能开销：每次调用 finalize 方法都会增加垃圾回收的开销，因为它需要两次垃圾回收周期才能完全回收对象。</li>
+<li>死锁风险：如果 finalize 方法中存在死锁或其他阻塞操作，可能会导致整个垃圾回收过程被阻塞。</li>
+<li>资源泄露：如果 finalize 方法未能正确释放资源，可能会导致资源泄露。</li>
+</ol>
+<h1 id="Java中的访问控制符有哪些？"><a href="#Java中的访问控制符有哪些？" class="headerlink" title="Java中的访问控制符有哪些？"></a>Java中的访问控制符有哪些？</h1><table>
+<thead>
+<tr>
+<th>访问范围</th>
+<th>private</th>
+<th>default</th>
+<th>protected</th>
+<th>public</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>本类中</td>
+<td>允许</td>
+<td>允许</td>
+<td>允许</td>
+<td>允许</td>
+</tr>
+<tr>
+<td>同一包中的类（子类&#x2F;非子类）</td>
+<td></td>
+<td>允许</td>
+<td>允许</td>
+<td>允许</td>
+</tr>
+<tr>
+<td><strong>其他包中的子类</strong></td>
+<td></td>
+<td></td>
+<td>允许</td>
+<td>允许</td>
+</tr>
+<tr>
+<td><strong>其他包中非子类</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td>允许</td>
+</tr>
+</tbody></table>
+<h1 id="Java的构造器有哪些特点"><a href="#Java的构造器有哪些特点" class="headerlink" title="Java的构造器有哪些特点"></a>Java的构造器有哪些特点</h1><ol>
+<li>名称与类名相同、不返回任何值、可以重载、可以调用其他构造器、可以有访问修饰符、可以抛出异常、可以调用父类构造器</li>
+<li>如果我们没有显示编写构造器，在编译时，会为我们提供一个默认的无参构造器。</li>
+<li>在调用构造器之前，已经在队中分配内存。并进行默认初始化。之后会调用构造器，如果有父类构造器会先执行父类构造器，父类完成后执行自身的初始化内容，完成初始化。</li>
+</ol>
+<h1 id="Java中的内部类时怎样的？"><a href="#Java中的内部类时怎样的？" class="headerlink" title="Java中的内部类时怎样的？"></a>Java中的内部类时怎样的？</h1><p>内部类分为：</p>
+<ul>
+<li>静态内部类：静态内部类是与外部类相关的<blockquote>
+<p>静态内部类一般使用public static修饰，也可以使用private static使用，那样只能在外部类内部使用。在外部类以外的地方使用静态类时，需要带上外部类的包名，例如创建一个静态内部类对象：</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line">OutClass.<span class="type">InnerClass</span> <span class="variable">object</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">OutClass</span>.InnerClass();</span><br></pre></td></tr></table></figure></li>
+<li>非静态内部类：非静态内部类是与外部类的实例对象相关的<blockquote>
+<p>非静态内部类是跟外部类的实例对象绑定在一起的。外部类一般是由两种访问修饰符default（只能包内访问），public（所有位置可以访问）。而非静态内部类有private，default，protected，public四种访问修饰符。因为必须跟外部类的实例对象绑定在一起，所以非静态内部类不能有静态方法，静态成员变量，静态初始化块，在外面创建一个非静态内部类对象：</p>
+</blockquote>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="type">OutClass</span> <span class="variable">out</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">OutClass</span>();</span><br><span class="line">OutClass.<span class="type">InnerClass</span> <span class="variable">object</span> <span class="operator">=</span> out.<span class="keyword">new</span> <span class="title class_">InnerClass</span>();</span><br></pre></td></tr></table></figure></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>访问范围</th>
+<th>private</th>
+<th>default</th>
+<th>protected</th>
+<th>public</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>本类中</td>
+<td>允许</td>
+<td>允许</td>
+<td>允许</td>
+<td>允许</td>
+</tr>
+<tr>
+<td>同一包中的类（子类&#x2F;非子类）</td>
+<td></td>
+<td>允许</td>
+<td>允许</td>
+<td>允许</td>
+</tr>
+<tr>
+<td><strong>其他包中的子类</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td>允许</td>
+</tr>
+<tr>
+<td><strong>其他包中非子类</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td>允许</td>
+</tr>
+</tbody></table>
+]]></content>
       <categories>
         <category>面试</category>
       </categories>
