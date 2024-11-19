@@ -27,10 +27,13 @@
 <meta property="og:site_name" content="难自弃">
 <meta property="og:description" content="Java中变量、代码块、构造器之间执行顺序是怎样的？ 先初始化静态部分，在初始化动态部分； 先初始化父类，后初始化子类 先初始化变量，在初始化代码块和构造器  所以按照这个规则可以得出总体顺序是：  父类的静态成员变量（第一次加载） 父类的静态代码块（第一次加载） 子类的静态成员变量（第一次加载） 子类的静态代码块（第一次加载） 父类的普通成员变量 父类的动态代码块 父类的构造函数 子类的普通成员">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2024/11/15/Java-Base/java-type.png">
+<meta property="og:image" content="http://example.com/2024/11/15/Java-Base/java-exception.png">
 <meta property="article:published_time" content="2024-11-15T06:13:38.000Z">
-<meta property="article:modified_time" content="2024-11-18T12:01:16.446Z">
+<meta property="article:modified_time" content="2024-11-19T06:17:53.908Z">
 <meta property="article:author" content="zhenghun">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2024/11/15/Java-Base/java-type.png">
 
 <link rel="canonical" href="http://example.com/2024/11/15/Java-Base/">
 
@@ -214,7 +217,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-11-18 20:01:16" itemprop="dateModified" datetime="2024-11-18T20:01:16+08:00">2024-11-18</time>
+                <time title="修改时间：2024-11-19 14:17:53" itemprop="dateModified" datetime="2024-11-19T14:17:53+08:00">2024-11-19</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -239,14 +242,14 @@
                 <i class="far fa-file-word"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>10k</span>
+              <span>14k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="far fa-clock"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>18 分钟</span>
+              <span>25 分钟</span>
             </span>
 
         </div>
@@ -276,6 +279,71 @@
 <li>子类的动态代码块</li>
 <li>子类的构造函数<span id="more"></span></li>
 </ol>
+<h1 id="Java基本数据类型"><a href="#Java基本数据类型" class="headerlink" title="Java基本数据类型"></a>Java基本数据类型</h1><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>字节数</th>
+<th>默认值</th>
+<th>取值范围</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>byte</td>
+<td>1字节</td>
+<td>0</td>
+<td>-128~127，也就是-2的7次方到2的7次方减1</td>
+</tr>
+<tr>
+<td>short</td>
+<td>2字节</td>
+<td>0</td>
+<td>－32768～32767，就是-2的15次方到2的15次方减1</td>
+</tr>
+<tr>
+<td>int</td>
+<td>4字节</td>
+<td>0</td>
+<td>-2147483648 - 2147483647，-2^31 - 2^31-1，十亿数量级</td>
+</tr>
+<tr>
+<td>long</td>
+<td>8字节</td>
+<td>0</td>
+<td>-2的63次方到2的64次方，换算成十进制的数，是有19位。</td>
+</tr>
+<tr>
+<td>float</td>
+<td>4字节</td>
+<td>0.0</td>
+<td></td>
+</tr>
+<tr>
+<td>double</td>
+<td>8字节</td>
+<td>0.0</td>
+<td></td>
+</tr>
+<tr>
+<td>boolean</td>
+<td>1字节</td>
+<td>false</td>
+<td></td>
+</tr>
+<tr>
+<td>char</td>
+<td>2字节</td>
+<td>空</td>
+<td>Java使用的是unicode编码，16个二进制位。取值范围会大一些，所以用的2字节，可以存汉字。</td>
+</tr>
+</tbody></table>
+<p><img src="/2024/11/15/Java-Base/java-type.png" alt="图片" title="Java数据类型"></p>
+<ul>
+<li><strong>类：</strong>类是 Java 中最基本的引用数据类型。每个类都可以创建一个或多个对象（实例），这些对象通过引用变量来引用。</li>
+<li><strong>接口：</strong>接口是一种特殊的引用数据类型，用于定义一组方法但不实现它们。类可以通过实现接口来获得这些方法。</li>
+<li><strong>数组：</strong>数组是一种可以存储固定数量相同类型元素的引用数据类型。数组本身也是一个对象。</li>
+</ul>
+<h2 id="包装类型和基本类型的区别是什么？"><a href="#包装类型和基本类型的区别是什么？" class="headerlink" title="包装类型和基本类型的区别是什么？"></a>包装类型和基本类型的区别是什么？</h2><p>最主要的区别是包装类型是对象，拥有字段和方法，可以很方便地调用一些基本的方法，初始值是null，而且可以使用null代表空值，<br>而基本数据类型只能使用0来代表初始值。其次是基本数据类型是直接存储在栈中，而包装类型是一个对象，对象的引用变量是存储在栈中，存储了对象在堆中的地址，对象的数据是存在堆中。</p>
 <h1 id="Integer-缓存问题"><a href="#Integer-缓存问题" class="headerlink" title="Integer 缓存问题"></a>Integer 缓存问题</h1><p>在聊缓存之前，我们先来看一个例子。如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Integer</span> <span class="variable">a</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Integer</span>(<span class="number">127</span>);</span><br><span class="line"><span class="type">Integer</span> <span class="variable">b</span> <span class="operator">=</span> <span class="number">127</span>;</span><br><span class="line">System.out.println(a == b); <span class="comment">// false</span></span><br><span class="line"></span><br><span class="line"><span class="type">Integer</span> <span class="variable">c</span> <span class="operator">=</span> Integer.valueOf(<span class="number">127</span>);</span><br><span class="line">System.out.println(b == c); <span class="comment">// true</span></span><br></pre></td></tr></table></figure>
 <p>从上面的代码可以看出，我们都是127整数。但是输出的结果不同。先给出结论：</p>
@@ -504,6 +572,96 @@
 <td>允许</td>
 </tr>
 </tbody></table>
+<h1 id="Java中的注解是什么？"><a href="#Java中的注解是什么？" class="headerlink" title="Java中的注解是什么？"></a>Java中的注解是什么？</h1><p>Java 注解（Annotations）是一种元数据形式，可以提供有关程序元素（如类、方法、变量等）的额外信息。注解不会直接影响代码的执行，但可以被编译器、工具或运行时环境使用，以影响程序的行为或生成额外的信息。<br>更直白一点就是在类、字段、方法上面打个标记，在其他地方读取这些标记干一些其他事情。</p>
+<h2 id="注解定义"><a href="#注解定义" class="headerlink" title="注解定义"></a>注解定义</h2><ul>
+<li>注解是附加在代码上的元数据，用于描述代码的某些特性。</li>
+<li>注解本身并不直接改变代码的行为，但可以通过注解处理器在编译时或运行时对代码进行处理。</li>
+</ul>
+<h2 id="注解用途"><a href="#注解用途" class="headerlink" title="注解用途"></a>注解用途</h2><ul>
+<li>编译时检查：帮助编译器验证代码的正确性。</li>
+<li>编译时处理：生成额外的源代码或资源文件。</li>
+<li>运行时处理：在运行时通过反射机制读取注解信息并执行相应的逻辑。</li>
+</ul>
+<h2 id="注解分类"><a href="#注解分类" class="headerlink" title="注解分类"></a>注解分类</h2><ul>
+<li>内置注解<ul>
+<li>@Override：表示一个方法覆盖了父类的方法。</li>
+<li>@Deprecated：表示一个方法或类已被弃用。</li>
+<li>@SuppressWarnings：抑制编译器警告。</li>
+</ul>
+</li>
+<li>元注解：用于申明自定义注解使用<ul>
+<li>@Retention：指定注解的保留策略，即注解在什么级别可用。<ul>
+<li>RetentionPolicy.SOURCE：注解仅在源代码级别保留，编译时会被丢弃。</li>
+<li>RetentionPolicy.CLASS：注解在字节码文件中保留，默认值。</li>
+<li>RetentionPolicy.RUNTIME：注解在运行时保留，可以通过反射读取。</li>
+</ul>
+</li>
+<li>@Target：指定注解可以应用的目标类型。<ul>
+<li>ElementType.TYPE：类、接口、枚举。</li>
+<li>ElementType.FIELD：字段、枚举常量。</li>
+<li>ElementType.METHOD：方法。</li>
+<li>ElementType.PARAMETER：方法参数。</li>
+<li>ElementType.CONSTRUCTOR：构造函数。</li>
+<li>ElementType.LOCAL_VARIABLE：局部变量。</li>
+<li>ElementType.ANNOTATION_TYPE：注解类型。</li>
+<li>ElementType.PACKAGE：包。</li>
+</ul>
+</li>
+<li>@Documented：表示注解应该包含在生成的 Javadoc 中。</li>
+<li>@Inherited：表示注解可以被子类继承。</li>
+</ul>
+</li>
+<li>自定义注解： 来满足特定的需求。</li>
+</ul>
+<h2 id="自定义注解示例"><a href="#自定义注解示例" class="headerlink" title="自定义注解示例"></a>自定义注解示例</h2><p>以下是一个自定义注解的示例，用于标记需要日志记录的方法：</p>
+<ol>
+<li>定义注解 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 自定义注解</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Target(ElementType.METHOD)</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> Loggable &#123;</span><br><span class="line">    String <span class="title function_">value</span><span class="params">()</span> <span class="keyword">default</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>使用注解<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyClass</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Loggable(value = &quot;This is a loggable method&quot;)</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">myMethod</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Executing myMethod&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>注解处理器<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.lang.reflect.Method;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AnnotationProcessor</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">process</span><span class="params">(Object obj)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        Method[] methods = obj.getClass().getMethods();</span><br><span class="line">        <span class="keyword">for</span> (Method method : methods) &#123;</span><br><span class="line">            <span class="keyword">if</span> (method.isAnnotationPresent(Loggable.class)) &#123;</span><br><span class="line">                <span class="type">Loggable</span> <span class="variable">loggable</span> <span class="operator">=</span> method.getAnnotation(Loggable.class);</span><br><span class="line">                System.out.println(<span class="string">&quot;Processing method: &quot;</span> + method.getName());</span><br><span class="line">                System.out.println(<span class="string">&quot;Log message: &quot;</span> + loggable.value());</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 调用方法</span></span><br><span class="line">                method.invoke(obj);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="type">MyClass</span> <span class="variable">myClass</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MyClass</span>();</span><br><span class="line">        process(myClass);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h1 id="Java异常体系？"><a href="#Java异常体系？" class="headerlink" title="Java异常体系？"></a>Java异常体系？</h1><p><img src="/2024/11/15/Java-Base/java-exception.png" alt="图片" title="Java异常体系"><br>Java 的异常体系基于类层次结构，所有异常都继承自 Throwable 类。主要分为两大类：Error 和 Exception。下面详细介绍 Java 异常体系的主要组成部分及其特点。</p>
+<ol>
+<li><p>Throwable 类<br>Throwable 是 Java 异常体系的顶级父类，所有异常类都直接或间接继承自 Throwable。Throwable 类提供了几个重要的方法，如 getMessage()、getStackTrace() 和 printStackTrace()，用于获取异常信息和堆栈跟踪。</p>
+</li>
+<li><p>Error 类<br>Error 类及其子类表示严重的错误，通常是不可恢复的，如虚拟机错误、内存溢出等。这些错误通常不是应用程序应该捕获和处理的，而是应该让 JVM 处理。</p>
+</li>
+<li><p>Exception 类<br>Exception 类及其子类表示程序可以捕获和处理的异常。Exception 类又可以分为两大类：受检异常（Checked Exceptions）和非受检异常（Unchecked Exceptions）。</p>
+<ul>
+<li><strong>受检异常（Checked Exceptions）</strong><blockquote>
+<p>受检异常是编译器强制要求处理的异常。如果方法中抛出了受检异常，那么必须在方法签名中声明该异常，或者在方法内部使用 try-catch 块捕获并处理该异常。</p>
+<p>常见受检异常包括：</p>
+<p>IOException：输入输出异常。<br>SQLException：数据库访问异常。<br>ClassNotFoundException：找不到指定类的异常。</p>
+</blockquote>
+</li>
+<li><strong>非受检异常（Unchecked Exceptions）</strong><blockquote>
+<p>非受检异常是编译器不要求处理的异常。这类异常通常是编程错误或运行时错误，如空指针异常、数组越界异常等。</p>
+<p>常见非受检异常包括：</p>
+<ul>
+<li>RuntimeException：运行时异常。<ul>
+<li>NullPointerException：空指针异常。</li>
+<li>ArrayIndexOutOfBoundsException：数组索引越界异常。</li>
+<li>IllegalArgumentException：非法参数异常。</li>
+<li>ArithmeticException：算术异常，如除以零。</li>
+</ul>
+</li>
+<li>AssertionError：断言错误。</li>
+<li>NoSuchMethodError：方法不存在错误。</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</li>
+<li><p>自定义异常<br>除了使用 Java 内置的异常类，你还可以自定义异常类来处理特定的错误情况。自定义异常类通常继承自 Exception 或其子类。</p>
+</li>
+</ol>
+<h1 id="Java中到底是值传递还是引用传递？"><a href="#Java中到底是值传递还是引用传递？" class="headerlink" title="Java中到底是值传递还是引用传递？"></a>Java中到底是值传递还是引用传递？</h1><p><strong>引用传递：</strong><br>在调用方法时，将实际参数的地址直接传递到方法中，那么在方法中对参数所进行的修改，将影响到实际参数。<strong>但是，如果你在方法内部将引用重新指向另一个对象，这不会影响到原始引用。</strong>因为我们的参数引用地址发生了变化，而原先的引用地址没有变化。</p>
+<p><strong>值传递：</strong><br>在调用方法时将实际参数拷贝一份传递到方法中，这样在方法中如果对参数进行修改，将不会影响到实际参数。</p>
+<p><strong>Java是值传递：</strong></p>
+<ul>
+<li>当传的是基本类型时，传的是值的拷贝，对拷贝变量的修改不影响原变量；</li>
+<li>当传的是引用类型时，传的是引用地址的拷贝，但是拷贝的地址和真实地址指向的都是同一个真实数据，因此可以修改原变量中的值；</li>
+<li>当传的是String类型时，虽然拷贝的也是引用地址，指向的是同一个数据，但是String的值不能被修改，因此无法修改原变量中的值（对String修改，只能是赋予新对象值，所以原始引用不受影响）。</li>
+</ul>
 
     </div>
 
@@ -596,7 +754,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java%E4%B8%AD%E5%8F%98%E9%87%8F%E3%80%81%E4%BB%A3%E7%A0%81%E5%9D%97%E3%80%81%E6%9E%84%E9%80%A0%E5%99%A8%E4%B9%8B%E9%97%B4%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F%E6%98%AF%E6%80%8E%E6%A0%B7%E7%9A%84%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">Java中变量、代码块、构造器之间执行顺序是怎样的？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Integer-%E7%BC%93%E5%AD%98%E9%97%AE%E9%A2%98"><span class="nav-number">2.</span> <span class="nav-text">Integer 缓存问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8A%BD%E8%B1%A1%E7%B1%BB%E6%9C%89%E5%93%AA%E4%BA%9B%E7%89%B9%E7%82%B9%EF%BC%9F"><span class="nav-number">3.</span> <span class="nav-text">抽象类有哪些特点？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#String"><span class="nav-number">4.</span> <span class="nav-text">String</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88JDK9%E5%BC%80%E5%A7%8B%EF%BC%8CString-%E5%86%85%E9%83%A8%E4%BD%BF%E7%94%A8byte-%E5%AD%98%E6%94%BE%E6%95%B0%E6%8D%AE%EF%BC%9F"><span class="nav-number">5.</span> <span class="nav-text">为什么JDK9开始，String 内部使用byte[]存放数据？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#StringBuilder-%E5%92%8C-StringBuffer-%E4%B9%8B%E9%97%B4%E7%9A%84%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">6.</span> <span class="nav-text">StringBuilder 和 StringBuffer 之间的区别是什么？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88hashCode%E5%92%8Cequals%E6%96%B9%E6%B3%95%E8%A6%81%E4%B8%80%E8%B5%B7%E9%87%8D%E5%86%99%EF%BC%9F"><span class="nav-number">7.</span> <span class="nav-text">为什么hashCode和equals方法要一起重写？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E9%87%8D%E5%86%99hashCode"><span class="nav-number">7.1.</span> <span class="nav-text">为什么要重写hashCode?</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%82%A3%E4%B8%BA%E4%BB%80%E4%B9%88%E5%AF%B9%E6%AF%94%E5%AF%B9%E8%B1%A1%E6%89%80%E6%9C%89%E5%B1%9E%E6%80%A7%E7%9A%84hashcode%E6%97%B6%E5%B0%B1%E8%83%BD%E7%9B%B8%E7%AD%89%E5%91%A2%EF%BC%9F"><span class="nav-number">8.</span> <span class="nav-text">那为什么对比对象所有属性的hashcode时就能相等呢？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Object-%E6%9C%89%E5%93%AA%E4%BA%9B%E8%87%AA%E5%B8%A6%E6%96%B9%E6%B3%95%EF%BC%9F"><span class="nav-number">9.</span> <span class="nav-text">Object 有哪些自带方法？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#registerNatives"><span class="nav-number">9.1.</span> <span class="nav-text">registerNatives:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#getClass"><span class="nav-number">9.2.</span> <span class="nav-text">getClass</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hashCode"><span class="nav-number">9.3.</span> <span class="nav-text">hashCode</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#equals"><span class="nav-number">9.4.</span> <span class="nav-text">equals</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#clone"><span class="nav-number">9.5.</span> <span class="nav-text">clone</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#toString-NaN"><span class="nav-number">9.6.</span> <span class="nav-text">toString</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#notify"><span class="nav-number">9.7.</span> <span class="nav-text">notify</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#notifyAll"><span class="nav-number">9.8.</span> <span class="nav-text">notifyAll</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#wait"><span class="nav-number">9.9.</span> <span class="nav-text">wait</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#finalize"><span class="nav-number">9.10.</span> <span class="nav-text">finalize</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java%E4%B8%AD%E7%9A%84%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6%E7%AC%A6%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="nav-number">10.</span> <span class="nav-text">Java中的访问控制符有哪些？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java%E7%9A%84%E6%9E%84%E9%80%A0%E5%99%A8%E6%9C%89%E5%93%AA%E4%BA%9B%E7%89%B9%E7%82%B9"><span class="nav-number">11.</span> <span class="nav-text">Java的构造器有哪些特点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java%E4%B8%AD%E7%9A%84%E5%86%85%E9%83%A8%E7%B1%BB%E6%97%B6%E6%80%8E%E6%A0%B7%E7%9A%84%EF%BC%9F"><span class="nav-number">12.</span> <span class="nav-text">Java中的内部类时怎样的？</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java%E4%B8%AD%E5%8F%98%E9%87%8F%E3%80%81%E4%BB%A3%E7%A0%81%E5%9D%97%E3%80%81%E6%9E%84%E9%80%A0%E5%99%A8%E4%B9%8B%E9%97%B4%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F%E6%98%AF%E6%80%8E%E6%A0%B7%E7%9A%84%EF%BC%9F"><span class="nav-number">1.</span> <span class="nav-text">Java中变量、代码块、构造器之间执行顺序是怎样的？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="nav-number">2.</span> <span class="nav-text">Java基本数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8C%85%E8%A3%85%E7%B1%BB%E5%9E%8B%E5%92%8C%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">2.1.</span> <span class="nav-text">包装类型和基本类型的区别是什么？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Integer-%E7%BC%93%E5%AD%98%E9%97%AE%E9%A2%98"><span class="nav-number">3.</span> <span class="nav-text">Integer 缓存问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8A%BD%E8%B1%A1%E7%B1%BB%E6%9C%89%E5%93%AA%E4%BA%9B%E7%89%B9%E7%82%B9%EF%BC%9F"><span class="nav-number">4.</span> <span class="nav-text">抽象类有哪些特点？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#String"><span class="nav-number">5.</span> <span class="nav-text">String</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88JDK9%E5%BC%80%E5%A7%8B%EF%BC%8CString-%E5%86%85%E9%83%A8%E4%BD%BF%E7%94%A8byte-%E5%AD%98%E6%94%BE%E6%95%B0%E6%8D%AE%EF%BC%9F"><span class="nav-number">6.</span> <span class="nav-text">为什么JDK9开始，String 内部使用byte[]存放数据？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#StringBuilder-%E5%92%8C-StringBuffer-%E4%B9%8B%E9%97%B4%E7%9A%84%E5%8C%BA%E5%88%AB%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">7.</span> <span class="nav-text">StringBuilder 和 StringBuffer 之间的区别是什么？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88hashCode%E5%92%8Cequals%E6%96%B9%E6%B3%95%E8%A6%81%E4%B8%80%E8%B5%B7%E9%87%8D%E5%86%99%EF%BC%9F"><span class="nav-number">8.</span> <span class="nav-text">为什么hashCode和equals方法要一起重写？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E9%87%8D%E5%86%99hashCode"><span class="nav-number">8.1.</span> <span class="nav-text">为什么要重写hashCode?</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%82%A3%E4%B8%BA%E4%BB%80%E4%B9%88%E5%AF%B9%E6%AF%94%E5%AF%B9%E8%B1%A1%E6%89%80%E6%9C%89%E5%B1%9E%E6%80%A7%E7%9A%84hashcode%E6%97%B6%E5%B0%B1%E8%83%BD%E7%9B%B8%E7%AD%89%E5%91%A2%EF%BC%9F"><span class="nav-number">9.</span> <span class="nav-text">那为什么对比对象所有属性的hashcode时就能相等呢？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Object-%E6%9C%89%E5%93%AA%E4%BA%9B%E8%87%AA%E5%B8%A6%E6%96%B9%E6%B3%95%EF%BC%9F"><span class="nav-number">10.</span> <span class="nav-text">Object 有哪些自带方法？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#registerNatives"><span class="nav-number">10.1.</span> <span class="nav-text">registerNatives:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#getClass"><span class="nav-number">10.2.</span> <span class="nav-text">getClass</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hashCode"><span class="nav-number">10.3.</span> <span class="nav-text">hashCode</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#equals"><span class="nav-number">10.4.</span> <span class="nav-text">equals</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#clone"><span class="nav-number">10.5.</span> <span class="nav-text">clone</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#toString-NaN"><span class="nav-number">10.6.</span> <span class="nav-text">toString</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#notify"><span class="nav-number">10.7.</span> <span class="nav-text">notify</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#notifyAll"><span class="nav-number">10.8.</span> <span class="nav-text">notifyAll</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#wait"><span class="nav-number">10.9.</span> <span class="nav-text">wait</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#finalize"><span class="nav-number">10.10.</span> <span class="nav-text">finalize</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java%E4%B8%AD%E7%9A%84%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6%E7%AC%A6%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="nav-number">11.</span> <span class="nav-text">Java中的访问控制符有哪些？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java%E7%9A%84%E6%9E%84%E9%80%A0%E5%99%A8%E6%9C%89%E5%93%AA%E4%BA%9B%E7%89%B9%E7%82%B9"><span class="nav-number">12.</span> <span class="nav-text">Java的构造器有哪些特点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java%E4%B8%AD%E7%9A%84%E5%86%85%E9%83%A8%E7%B1%BB%E6%97%B6%E6%80%8E%E6%A0%B7%E7%9A%84%EF%BC%9F"><span class="nav-number">13.</span> <span class="nav-text">Java中的内部类时怎样的？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java%E4%B8%AD%E7%9A%84%E6%B3%A8%E8%A7%A3%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">14.</span> <span class="nav-text">Java中的注解是什么？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E8%A7%A3%E5%AE%9A%E4%B9%89"><span class="nav-number">14.1.</span> <span class="nav-text">注解定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E8%A7%A3%E7%94%A8%E9%80%94"><span class="nav-number">14.2.</span> <span class="nav-text">注解用途</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E8%A7%A3%E5%88%86%E7%B1%BB"><span class="nav-number">14.3.</span> <span class="nav-text">注解分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B3%A8%E8%A7%A3%E7%A4%BA%E4%BE%8B"><span class="nav-number">14.4.</span> <span class="nav-text">自定义注解示例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java%E5%BC%82%E5%B8%B8%E4%BD%93%E7%B3%BB%EF%BC%9F"><span class="nav-number">15.</span> <span class="nav-text">Java异常体系？</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java%E4%B8%AD%E5%88%B0%E5%BA%95%E6%98%AF%E5%80%BC%E4%BC%A0%E9%80%92%E8%BF%98%E6%98%AF%E5%BC%95%E7%94%A8%E4%BC%A0%E9%80%92%EF%BC%9F"><span class="nav-number">16.</span> <span class="nav-text">Java中到底是值传递还是引用传递？</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -651,12 +809,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-area"></i>
     </span>
-    <span title="站点总字数">10k</span>
+    <span title="站点总字数">14k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">19 分钟</span>
+    <span title="站点阅读时长">26 分钟</span>
 </div>
   <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
