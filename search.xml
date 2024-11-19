@@ -1,24 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Hello World</title>
-    <url>/2024/11/15/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
-  </entry>
-  <entry>
     <title>Java基础面试题</title>
     <url>/2024/11/15/Java-Base/</url>
     <content><![CDATA[<h1 id="Java中变量、代码块、构造器之间执行顺序是怎样的？"><a href="#Java中变量、代码块、构造器之间执行顺序是怎样的？" class="headerlink" title="Java中变量、代码块、构造器之间执行顺序是怎样的？"></a>Java中变量、代码块、构造器之间执行顺序是怎样的？</h1><ul>
@@ -422,9 +404,95 @@
 <li>当传的是引用类型时，传的是引用地址的拷贝，但是拷贝的地址和真实地址指向的都是同一个真实数据，因此可以修改原变量中的值；</li>
 <li>当传的是String类型时，虽然拷贝的也是引用地址，指向的是同一个数据，但是String的值不能被修改，因此无法修改原变量中的值（对String修改，只能是赋予新对象值，所以原始引用不受影响）。</li>
 </ul>
+<h1 id="Java序列化和反序列化？"><a href="#Java序列化和反序列化？" class="headerlink" title="Java序列化和反序列化？"></a>Java序列化和反序列化？</h1><p>Java 序列化（Serialization）和反序列化（Deserialization）是将对象的状态转换为字节流以便于存储或传输，以及将字节流还原为对象的过程。序列化和反序列化在分布式系统、网络通信、持久化存储等场景中非常有用。</p>
+<p>对象要进行序列化和反序列化，那么对象的类必须实现 Serializable 接口。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.Serializable;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Person</span> <span class="keyword">implements</span> <span class="title class_">Serializable</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">long</span> <span class="variable">serialVersionUID</span> <span class="operator">=</span> <span class="number">1L</span>; <span class="comment">// 版本控制ID</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> age;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Person</span><span class="params">(String name, <span class="type">int</span> age)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.name = name;</span><br><span class="line">        <span class="built_in">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Person&#123;name=&#x27;&quot;</span> + name + <span class="string">&quot;&#x27;, age=&quot;</span> + age + <span class="string">&quot;&#125;&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>序列化：</strong></p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.FileOutputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.ObjectOutputStream;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SerializationExample</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Person</span> <span class="variable">person</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Person</span>(<span class="string">&quot;Alice&quot;</span>, <span class="number">30</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> (<span class="type">ObjectOutputStream</span> <span class="variable">oos</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectOutputStream</span>(<span class="keyword">new</span> <span class="title class_">FileOutputStream</span>(<span class="string">&quot;person.ser&quot;</span>))) &#123;</span><br><span class="line">            oos.writeObject(person);</span><br><span class="line">            System.out.println(<span class="string">&quot;Object has been serialized&quot;</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>反序列化：</strong><br>反序列化是将字节流还原为对象的过程。</p>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.FileInputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.ObjectInputStream;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DeserializationExample</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Person</span> <span class="variable">person</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> (<span class="type">ObjectInputStream</span> <span class="variable">ois</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectInputStream</span>(<span class="keyword">new</span> <span class="title class_">FileInputStream</span>(<span class="string">&quot;person.ser&quot;</span>))) &#123;</span><br><span class="line">            person = (Person) ois.readObject();</span><br><span class="line">            System.out.println(<span class="string">&quot;Object has been deserialized&quot;</span>);</span><br><span class="line">            System.out.println(person);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>serialVersionUID：</p>
+<ul>
+<li>serialVersionUID 是一个版本控制ID，用于在反序列化时验证序列化的对象和当前类是否兼容。如果不一致，可能会抛出 InvalidClassException。</li>
+<li>如果不显式指定 serialVersionUID，Java 编译器会自动生成一个，但这可能导致在类结构变化时反序列化失败。</li>
+</ul>
+</li>
+<li><p>瞬态字段（Transient Fields）：</p>
+<ul>
+<li>使用 transient 关键字修饰的字段不会被序列化。</li>
+</ul>
+</li>
+<li><p>自定义序列化和反序列化</p>
+<ul>
+<li>可以通过实现 writeObject 和 readObject 方法来自定义序列化和反序列化过程。<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.ObjectInputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.ObjectOutputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.Serializable;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 也可以实现 Externalizable 接口</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Person</span> <span class="keyword">implements</span> <span class="title class_">Serializable</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">long</span> <span class="variable">serialVersionUID</span> <span class="operator">=</span> <span class="number">1L</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> age;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">transient</span> String password;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Person</span><span class="params">(String name, <span class="type">int</span> age, String password)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.name = name;</span><br><span class="line">        <span class="built_in">this</span>.age = age;</span><br><span class="line">        <span class="built_in">this</span>.password = password;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Getters and Setters</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">writeObject</span><span class="params">(ObjectOutputStream out)</span> <span class="keyword">throws</span> IOException &#123;</span><br><span class="line">        out.defaultWriteObject();</span><br><span class="line">        out.writeObject(password);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">readObject</span><span class="params">(ObjectInputStream in)</span> <span class="keyword">throws</span> IOException, ClassNotFoundException &#123;</span><br><span class="line">        in.defaultReadObject();</span><br><span class="line">        password = (String) in.readObject();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Externalizable</span> <span class="keyword">extends</span> <span class="title class_">java</span>.io.Serializable &#123;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">writeExternal</span><span class="params">(ObjectOutput out)</span> <span class="keyword">throws</span> IOException;</span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">readExternal</span><span class="params">(ObjectInput in)</span> <span class="keyword">throws</span> IOException, ClassNotFoundException;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>安全性</p>
+<ul>
+<li>反序列化是一个潜在的安全风险,因为通过恶意构造的字节流,可能会加载不安全的类或执行不期望的代码。因此,反序列化过程需要进行输入验证,避免反序列化漏洞。</li>
+</ul>
+</li>
+<li><p>性能问题</p>
+<ul>
+<li>Java的默认序列化机制可能比较慢，尤其是对于大规模分布式系统，可能会选择更加高效的序列化框架（如 Protobuf、Kryo)</li>
+</ul>
+</li>
+</ul>
+<h2 id="为什么要序列化？"><a href="#为什么要序列化？" class="headerlink" title="为什么要序列化？"></a>为什么要序列化？</h2><p>为了两个Java进程进行通信时可以直接传输对象。这个时候就需要将对象序列化和反序列化。</p>
+<h2 id="序列化好处"><a href="#序列化好处" class="headerlink" title="序列化好处"></a>序列化好处</h2><ol>
+<li>可以把内存中的对象保存到文件或数据库中，以及分布式系统中数据交换</li>
+<li>在网络中传输对象</li>
+<li>通过RMI传输对象</li>
+</ol>
+<h2 id="几种常见的序列化和反序列化协议"><a href="#几种常见的序列化和反序列化协议" class="headerlink" title="几种常见的序列化和反序列化协议"></a>几种常见的序列化和反序列化协议</h2><ul>
+<li>XML &amp; SOAP<blockquote>
+<p>XML 是一种常用的序列化和反序列化协议，具有跨机器，跨语言等优点，SOAP（Simple Object Access protocol） 是一种被广泛应用的，基于 XML 为序列化和反序列化协议的结构化消息传递协议</p>
+</blockquote>
+</li>
+<li>JSON</li>
+<li>Protobuf</li>
+</ul>
+<h1 id="Java中的不可变类"><a href="#Java中的不可变类" class="headerlink" title="Java中的不可变类"></a>Java中的不可变类</h1><p>不可变类（Immutable Class）是指一旦对象被创建，其状态就不能再被修改的类。不可变类具有许多优点，特别是在多线程环境中，因为它们天生就是线程安全的。</p>
+<p><strong>不可变类的特点</strong></p>
+<ol>
+<li>不可修改：对象创建后，其状态不能被修改。</li>
+<li>线程安全：由于对象不可变，多个线程可以安全地共享同一个对象，而不需要同步。</li>
+<li>简化设计：不可变类的设计通常更简单，因为不需要考虑状态的变化。</li>
+<li>缓存友好：不可变对象可以被缓存和重用，因为它们的状态永远不会改变。<br><strong>创建不可变类的步骤</strong></li>
+<li>私有构造函数：确保类的构造函数是私有的，防止外部直接创建对象。</li>
+<li>只读属性：类的所有属性都应该是私有的，并且没有提供修改这些属性的方法。</li>
+<li>防御性拷贝：如果类的属性是可变对象，确保在构造函数和 getter 方法中使用防御性拷贝。</li>
+<li>final 关键字：使用 final 关键字确保类不能被继承，同时也可以将属性声明为 final。<br><strong>示例</strong><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">Person</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String name;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="type">int</span> age;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Address address;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 私有构造函数</span></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Person</span><span class="params">(String name, <span class="type">int</span> age, Address address)</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (name == <span class="literal">null</span> || address == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;Name and address cannot be null&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">this</span>.name = name;</span><br><span class="line">        <span class="built_in">this</span>.age = age;</span><br><span class="line">        <span class="built_in">this</span>.address = <span class="keyword">new</span> <span class="title class_">Address</span>(address); <span class="comment">// 防御性拷贝</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Getter 方法</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getName</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getAge</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> Address <span class="title function_">getAddress</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Address</span>(address); <span class="comment">// 防御性拷贝</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Person&#123;name=&#x27;&quot;</span> + name + <span class="string">&quot;&#x27;, age=&quot;</span> + age + <span class="string">&quot;, address=&quot;</span> + address + <span class="string">&quot;&#125;&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 可变类 Address</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Address</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> String street;</span><br><span class="line">    <span class="keyword">private</span> String city;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Address</span><span class="params">(String street, String city)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.street = street;</span><br><span class="line">        <span class="built_in">this</span>.city = city;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 防御性拷贝构造函数</span></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Address</span><span class="params">(Address other)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.street = other.street;</span><br><span class="line">        <span class="built_in">this</span>.city = other.city;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Getter 和 Setter 方法</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getStreet</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> street;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setStreet</span><span class="params">(String street)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.street = street;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getCity</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> city;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setCity</span><span class="params">(String city)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.city = city;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">toString</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Address&#123;street=&#x27;&quot;</span> + street + <span class="string">&quot;&#x27;, city=&#x27;&quot;</span> + city + <span class="string">&quot;&#x27;&#125;&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
 ]]></content>
       <categories>
         <category>面试</category>
       </categories>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2024/11/15/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>Java集合</title>
+    <url>/2024/11/19/Java-Collection/</url>
+    <content><![CDATA[]]></content>
   </entry>
 </search>
